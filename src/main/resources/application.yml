@@ -1,0 +1,17 @@
+server:
+    servlet:
+        context-path: /api
+    port: 8080
+
+
+spring:
+    profiles:
+        active: development
+    datasource:
+        url: jdbc:mysql://localhost:3306/petsitters
+        username: stark
+        password: "@P0rtug41"
+    application:
+        name: petSitters
+    jpa:
+        open-in-view: false
