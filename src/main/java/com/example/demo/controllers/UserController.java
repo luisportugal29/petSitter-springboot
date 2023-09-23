@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dtos.UserDto;
 import com.example.demo.services.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("users")
 public class UserController {
@@ -31,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping
-    public UserDto createSitter(@RequestBody UserDto userDto) {
+    public UserDto createSitter(@Valid @RequestBody UserDto userDto) {
         return this.userService.createUser(userDto);
     }
 }

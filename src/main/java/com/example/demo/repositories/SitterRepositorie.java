@@ -14,5 +14,9 @@ public interface SitterRepositorie extends CrudRepository<Sitter, Integer> {
     Optional<Sitter> findById(Integer id);
 
     List<Sitter> findByName(String name);
+
+    List<Sitter> findByNameStartsWithIgnoreCaseOrderByName(String name);
+
+    boolean existsByNameAndLastName(String name, String lastName);
     
 }

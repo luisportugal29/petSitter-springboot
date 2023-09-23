@@ -23,9 +23,9 @@ public class SitterService {
     @Autowired
     private ModelMapper modelMapper;
 
-
     public SitterDto getSitter(Integer id) {
         Optional<Sitter> sitter = this.repository.findById(id);
+        
         if (!sitter.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sitter not found");
         }
@@ -37,19 +37,31 @@ public class SitterService {
         return this.repository
             .findAll()
             .stream()
-            .map(sitter ->  {
-                return this.modelMapper.map(sitter,  SitterDto.class);
-            })
+            .map(sitter -> this.modelMapper.map(sitter,  SitterDto.class))
+            .collect(Collectors.toList());
+    }
+
+    public List<SitterDto> searchSittersByName(String name) {
+        
+        return this.repository.findByNameStartsWithIgnoreCaseOrderByName(name)
+            .stream()
+            .map(sitter -> this.modelMapper.map(sitter, SitterDto.class))
             .collect(Collectors.toList());
     }
 
     public SitterDto createSitter(SitterDto sitterDto) {
 
+        if ( this.repository.existsByNameAndLastName(sitterDto.getName(), sitterDto.getLastName()) )
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sitter has already been created");
+        
         Sitter sitter = this.modelMapper.map(sitterDto, Sitter.class);
 
         return this.modelMapper.map(this.repository.save(sitter), SitterDto.class);
 
     }
 
+    public void deleteSitter(Integer id) {
+        this.repository.deleteById(id);
+    }
 
 }
